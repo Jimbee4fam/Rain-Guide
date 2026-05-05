@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background-color: #0a0c0f;
+    color: #c9d1d9;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #111418;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #21262d;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00ff88;
+  }
+
+  input, textarea, select {
+    background-color: #111418;
+    color: #c9d1d9;
+    border: 1px solid #21262d;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.15);
+  }
+
+  select option {
+    background-color: #111418;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-rain-green text-rain-bg font-mono font-semibold text-sm px-4 py-2 rounded-md
+           hover:bg-rain-green-dim active:scale-95 transition-all duration-150;
+  }
+
+  .btn-secondary {
+    @apply border border-rain-border text-rain-text font-mono text-sm px-4 py-2 rounded-md
+           hover:border-rain-green hover:text-rain-green active:scale-95 transition-all duration-150;
+  }
+
+  .btn-danger {
+    @apply border border-rain-red text-rain-red font-mono text-sm px-4 py-2 rounded-md
+           hover:bg-rain-red hover:text-rain-bg active:scale-95 transition-all duration-150;
+  }
+
+  .card {
+    @apply bg-rain-card border border-rain-border rounded-xl p-4;
+  }
+
+  .tag-badge {
+    @apply text-xs font-mono px-2 py-0.5 rounded-full border;
+  }
+
+  .freq-display {
+    @apply font-mono text-rain-green text-lg font-bold tracking-wider;
+  }
+
+  .section-header {
+    @apply text-rain-muted font-mono text-xs uppercase tracking-widest mb-3;
+  }
+
+  .glow-green {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+
+  .glow-blue {
+    text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+  }
+
+  .glow-amber {
+    text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+  }
+
+  .border-glow-green {
+    box-shadow: 0 0 0 1px rgba(0, 255, 136, 0.3), 0 0 20px rgba(0, 255, 136, 0.05);
+  }
+
+  .scanline {
+    background: linear-gradient(
+      to bottom,
+      transparent 50%,
+      rgba(0, 255, 136, 0.03) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+  }
+
+  .category-aviation  { @apply text-rain-blue border-rain-blue; }
+  .category-weather   { @apply text-rain-amber border-rain-amber; }
+  .category-marine    { @apply text-rain-blue border-rain-blue; }
+  .category-fm        { @apply text-rain-purple border-rain-purple; }
+  .category-am        { @apply text-rain-amber border-rain-amber; }
+  .category-cb        { @apply text-rain-green border-rain-green; }
+  .category-railroad  { @apply text-rain-amber border-rain-amber; }
+  .category-frs       { @apply text-rain-green border-rain-green; }
+  .category-ham       { @apply text-rain-purple border-rain-purple; }
+  .category-hf        { @apply text-rain-amber border-rain-amber; }
+  .category-ais       { @apply text-rain-blue border-rain-blue; }
+  .category-utility   { @apply text-rain-muted border-rain-muted; }
+  .category-custom    { @apply text-rain-green border-rain-green; }
+}
+
+/* Noise texture overlay */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Smooth slide transitions */
+.page-enter {
+  animation: pageEnter 0.2s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Detail slide-up panel */
+.slide-up {
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* NFC scan animation */
+@keyframes nfcRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.nfc-ripple {
+  animation: nfcRipple 1.5s ease-out infinite;
+}
