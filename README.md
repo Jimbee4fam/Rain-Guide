@@ -1,8 +1,10 @@
-# 📡 RAIN Guide
+# 📡 Signal Stack
 
-**Radio Awareness & Intelligence Network — Field Reference System**
+**Offline SDR Tuning Reference & Field Communications Guide**
 
-A portable, offline-capable SDR tuning reference and training app. Built for Raspberry Pi Zero 2W or any browser device.
+A portable, browser-based field reference system for Software Defined Radio operators, communications learners, and field kit builders. Runs fully offline — no cloud, no login, no server required.
+
+Optimized for Raspberry Pi Zero 2W. Works on any modern browser.
 
 ---
 
@@ -12,7 +14,7 @@ A portable, offline-capable SDR tuning reference and training app. Built for Ras
 # 1. Install dependencies
 npm install
 
-# 2. Start development server
+# 2. Run development server
 npm run dev
 
 # 3. Open in browser
@@ -21,110 +23,119 @@ npm run dev
 
 ---
 
-## Build for Production / Raspberry Pi Deployment
+## Deploy to Raspberry Pi (or any device)
 
 ```bash
+# Build optimized production output (~65 kB gzipped)
 npm run build
-```
 
-Output is in `dist/`. Serve with any static file server:
-
-```bash
-# Using npx serve (simplest)
-npx serve dist
-
-# Using Python (Pi-friendly)
+# Serve from the dist/ folder using Python (no extras needed)
 cd dist && python3 -m http.server 8080
 
-# Access from any device on the network
-# → http://<pi-ip>:8080
+# Access from any device on the same network
+# → http://<device-ip>:8080
 ```
 
+Or use `npx serve dist` for a quick static server with proper MIME types.
+
 ---
 
-## Features
+## Modules
 
-| Module | Description |
+| Page | Description |
 |---|---|
-| **Home** | What is RAIN, basic usage, safety notes, system component guide |
-| **Signal Stack** | 50+ SDR presets with search, filter by category, full SDR app settings |
-| **Scan Tag** | NFC tag simulation — enter a tag ID to open matching preset |
-| **Favorites** | Quick access to starred presets |
-| **Custom Presets** | Add, edit, delete your own frequency entries |
+| **Home** | App overview, usage guide, operator notes, equipment reference, NFC training info |
+| **SDR Tuning Guide** | 50+ presets with search, category filter, full per-app SDR settings |
+| **Tag Scanner** | NFC tag simulation — enter a tag ID to load the matching preset |
+| **Favorites** | Starred presets persist across sessions via localStorage |
+| **Custom Presets** | Add, edit, and delete your own frequency entries |
 
 ---
 
-## Preset Categories
+## Preset Library
 
-- ✈️ Aviation (airband, emergency, ATIS, military guard, VOR, ACARS)
-- 🌤️ Weather (NOAA WX channels, APT satellite)
-- ⚓ Marine (VHF Ch16, Ch22A, AIS A/B, full band)
-- 📻 FM Broadcast (full band, EAS)
-- 📡 AM Broadcast (MW band)
-- 🚛 CB Radio (Ch9, Ch19, full band)
-- 🚂 Railroad (AAR channels)
-- 📟 FRS/GMRS (all 22 channels, GMRS repeaters)
-- 🔭 Ham Radio (2m simplex, 70cm, SSB weak signal, 10m/20m/40m/80m HF)
-- 🌐 HF/Shortwave (49m/31m/25m/19m broadcast, WWV time, SHARES emergency)
-- 🚢 AIS (vessel tracking A & B channels)
-- 🔧 Utility (ADS-B 1090MHz, ISS, APRS, POCSAG pagers, hydrogen line, ACARS, AFSK, VOR)
+50+ built-in presets across 12 categories:
+
+| Category | Examples |
+|---|---|
+| ✈️ Aviation | Airband VHF, Guard 121.5, ATIS, Military UHF, VOR, ACARS |
+| 🌤️ Weather | NOAA WX Ch1–7 (all), APT satellite imagery |
+| ⚓ Marine | Ch16 distress, Ch22A USCG, AIS A & B, full VHF band |
+| 📻 FM Broadcast | Full band WFM, EAS monitoring |
+| 📡 AM Broadcast | MW band, upconverter required |
+| 🚛 CB Radio | Ch9 emergency, Ch19 truckers, full 40-channel band |
+| 🚂 Railroad | AAR Ch1, full AAR VHF band |
+| 📟 FRS/GMRS | All 22 channels, GMRS repeater outputs |
+| 🔭 Ham Radio | 2m/70cm simplex, SSB weak signal, 10m/20m/40m/80m HF |
+| 🌐 HF/Shortwave | 49m/31m/25m/19m broadcast, WWV time signals, SHARES |
+| 🚢 AIS | Vessel tracking Ch A & B |
+| 🔧 Utility | ADS-B 1090MHz, ISS, APRS, POCSAG, hydrogen line, AFSK |
 
 ---
 
-## App Settings per Preset
+## Per-Preset SDR App Settings
 
-Every preset includes tuning settings for:
+Every preset includes tuning parameters for:
 
-- **SDR++** — mode, bandwidth, step
-- **SDR#** — mode, filter
+- **SDR++** — mode, bandwidth, step, plugin notes
+- **SDR#** — mode, filter width
 - **GQRX** — mode, filter width
-- **DragonOS** — notes and command-line guidance
+- **DragonOS** — command-line notes and tool recommendations
 
 ---
 
-## NFC Preparation
+## NFC Integration
 
-NFC hardware scanning is structurally ready but **not implemented** (no hardware API calls). To simulate:
+Signal Stack is structurally NFC-ready. Physical NFC scanning is not implemented (no hardware API calls made).
 
-1. Go to **Scan Tag** page
-2. Enter a Tag ID (e.g., `RAIN-AVI-001`)
-3. The matching preset opens automatically
+To simulate tag scanning:
+1. Go to **Tag Scanner** page
+2. Enter a tag ID — format `SS-[CATEGORY]-[NUMBER]`
+3. The matching preset loads instantly
 
-Tag IDs with presets: `RAIN-AVI-001`, `RAIN-AVI-002`, `RAIN-WX-001`, `RAIN-MAR-001`, `RAIN-HAM-001`, `RAIN-AIS-001`, `RAIN-UTIL-006`
+**Presets with tag IDs:** `SS-AVI-001`, `SS-AVI-002`, `SS-WX-001`, `SS-MAR-001`, `SS-HAM-001`, `SS-AIS-001`, `SS-UTIL-006`
+
+For physical tags, program NTAG213 stickers with the tag ID string using any Android NFC writer app.
 
 ---
 
-## Data Persistence
+## Data & Persistence
 
-All user data is stored in `localStorage` — no server or cloud required:
+All user data is stored in `localStorage` — works fully offline:
 
 | Key | Contents |
 |---|---|
-| `rain-favorites` | Record of favorited preset IDs |
-| `rain-custom-presets` | Array of user-created presets |
+| `rain-favorites` | Set of favorited preset IDs |
+| `rain-custom-presets` | Array of user-created custom presets |
+
+No data leaves the device.
 
 ---
 
 ## Tech Stack
 
 - **React 18** + TypeScript
-- **Vite 5** (fast build, minimal output)
-- **Tailwind CSS 3** (dark tactical theme)
-- **localStorage** (offline persistence)
-- **No external data dependencies**
+- **Vite 5** — fast builds, minimal output
+- **Tailwind CSS 3** — dark tactical theme
+- **localStorage** — offline persistence
+- **Zero external runtime dependencies**
 
 ---
 
 ## Raspberry Pi Zero 2W Notes
 
-- Build on a faster machine, copy `dist/` to the Pi
+- Build on a faster machine, copy `dist/` to the Pi via SCP or USB
 - Serve with `python3 -m http.server 8080`
-- Access from phone/tablet on same network
-- The app loads fast (~65 kB gzipped JS)
-- Works fully offline once loaded
+- Open on a phone or tablet connected to the same network
+- Production bundle is ~65 kB gzipped — loads in under 1 second on Pi
+- Full offline capability once the page has loaded once
 
 ---
 
-## License
+## Extending
 
-Internal / Field Use. Not for redistribution without permission.
+To add presets, edit `src/data/presets.ts` — follow the existing `Preset` interface pattern. Custom presets added via the UI are stored in localStorage and persist across sessions.
+
+---
+
+*Signal Stack — Portable. Offline. Field-ready.*
